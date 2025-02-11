@@ -38,6 +38,7 @@ async def log_new_user(message: types.Message):
     username = message.from_user.username if message.from_user.username else "No username"
     admin_message = f"📢 New user started the bot!
 🆔 ID: {user_id}
+👤 Username: @{username}"🆔 ID: {user_id}
 👤 Username: @{username}"
     await bot.send_message(ADMIN_ID, admin_message)
 async def send_welcome(message: types.Message):
