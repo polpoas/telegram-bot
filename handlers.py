@@ -33,6 +33,13 @@ game_menu = ReplyKeyboardMarkup(
 )
 
 @dp.message(Command("start"))
+async def log_new_user(message: types.Message):
+    user_id = message.from_user.id
+    username = message.from_user.username if message.from_user.username else "No username"
+    admin_message = f"📢 New user started the bot!
+🆔 ID: {user_id}
+👤 Username: @{username}"
+    await bot.send_message(ADMIN_ID, admin_message)
 async def send_welcome(message: types.Message):
     welcome_text = (
         "Welcome to GG Cheats – Your #1 Source for Game Cheats!\n\n"
@@ -125,7 +132,7 @@ async def confirm_payment(message: types.Message):
 
 @dp.message(lambda message: message.text == "📞 Contact Admin")
 async def contact_admin(message: types.Message):
-    await message.answer(f"You can contact the administrator here: @cheatGGadmin")
+    await message.answer(f"You can contact the administrator here: @YourAdminUsername")
 
 async def main():
     init_db()
