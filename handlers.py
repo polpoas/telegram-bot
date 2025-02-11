@@ -131,7 +131,7 @@ async def confirm_payment(message: types.Message):
 
 @dp.message(lambda message: message.text == "📞 Contact Admin")
 async def contact_admin(message: types.Message):
-    await message.answer(f"You can contact the administrator here: @YourAdminUsername")
+    await message.answer(f"You can contact the administrator here: @cheatGGadmin")
 
 async def main():
     init_db()
