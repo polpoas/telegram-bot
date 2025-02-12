@@ -70,7 +70,8 @@ async def show_rust_cheats(message: types.Message):
     )
     await message.answer("Select a cheat for Rust:", reply_markup=keyboard)
 
-@dp.message(lambda message: message.text in RUST_CHEAT_PRICES.keys())
+@dp.message(lambda message: message.text in RUST_CHEAT_PRICES.keys() or message.text == "🔙 Back")
+
 async def show_rust_cheat_prices(message: types.Message):
     cheat_name = message.text
     prices = RUST_CHEAT_PRICES[cheat_name]
@@ -88,7 +89,7 @@ async def show_war_thunder_cheats(message: types.Message):
     )
     await message.answer("Select a cheat for War Thunder:", reply_markup=keyboard)
 
-@dp.message(lambda message: message.text in WAR_THUNDER_CHEAT_PRICES.keys())
+@dp.message(lambda message: message.text in WAR_THUNDER_CHEAT_PRICES.keys() or message.text == "🔙 Back")
 async def show_war_thunder_cheat_prices(message: types.Message):
     cheat_name = message.text
     prices = WAR_THUNDER_CHEAT_PRICES[cheat_name]
@@ -101,7 +102,7 @@ async def show_war_thunder_cheat_prices(message: types.Message):
 @dp.message(lambda message: message.text == "\U0001F3AE Fortnite")
 async def show_fortnite_cheats(message: types.Message):
     keyboard = ReplyKeyboardMarkup(
-        keyboard=[[KeyboardButton(text=cheat)] for cheat in FORTNITE_CHEAT_PRICES.keys()] + [[KeyboardButton(text="\U0001F519 Back")]],
+        keyboard=[[KeyboardButton(text=cheat)] for cheat in FORTNITE_CHEAT_PRICES.keys()or message.text == "🔙 Back"],
         resize_keyboard=True
     )
     await message.answer("Select a cheat for Fortnite:", reply_markup=keyboard)
@@ -114,6 +115,9 @@ async def show_fortnite_cheat_prices(message: types.Message):
         keyboard=[[KeyboardButton(text=f"{period} - ${price}")] for period, price in prices.items()] + [[KeyboardButton(text="\U0001F519 Back")]],
         resize_keyboard=True
     )
+@dp.message(lambda message: message.text == "🔙 Back")
+async def go_back(message: types.Message):
+    await message.answer("Returning to main menu:", reply_markup=game_menu)
     await message.answer(f"Subscription options for {cheat_name}:", reply_markup=keyboard)
 async def process_payment(message: types.Message):
     amount = message.text.split(" ")[0].replace("$", "")
