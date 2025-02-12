@@ -138,3 +138,6 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+@dp.message()
+async def handle_unrecognized(message: types.Message):
+    await message.answer("I don't understand this command. Please use the menu.")
