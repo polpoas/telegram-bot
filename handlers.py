@@ -50,6 +50,18 @@ FORTNITE_CHEAT_PRICES = {
     "SHACK PRIVATE": {"30 days": 80}
 }
 
+@dp.message(Command("start"))
+async def send_welcome(message: types.Message):
+    await message.answer("Welcome! Choose a game to see available cheats.", reply_markup=game_menu)
+
+@dp.message(Command("help"))
+async def send_help(message: types.Message):
+    await message.answer("Use the menu to select a game and see cheat options.")
+
+@dp.message(lambda message: message.text == "\U0001F3AE Choose a game")
+async def choose_game(message: types.Message):
+    await message.answer("Select a game:", reply_markup=game_menu)
+
 @dp.message(lambda message: message.text == "\U0001F3AE Rust")
 async def show_rust_cheats(message: types.Message):
     keyboard = ReplyKeyboardMarkup(
@@ -103,7 +115,6 @@ async def show_fortnite_cheat_prices(message: types.Message):
         resize_keyboard=True
     )
     await message.answer(f"Subscription options for {cheat_name}:", reply_markup=keyboard)
-
 async def process_payment(message: types.Message):
     amount = message.text.split(" ")[0].replace("$", "")
     payment_link = CRYPTO_PAYMENT_LINKS[amount].format(order_id=message.chat.id)
