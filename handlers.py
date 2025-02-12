@@ -95,29 +95,7 @@ async def show_fortnite_cheat_prices(message: types.Message):
 @dp.message(lambda message: message.text == "\U0001F519 Back to Game Selection")
 async def go_back_to_game_selection(message: types.Message):
     await message.answer("Returning to game selection:", reply_markup=game_menu)
-
-async def main():
-    init_db()
-    await bot.delete_webhook(drop_pending_updates=True)
-    await dp.start_polling(bot)
-
-if __name__ == "__main__":
-    asyncio.run(main())
-
-
-@dp.message(lambda message: message.text == "\U0001F519 Back to Game Selection")
-async def go_back_to_game_selection(message: types.Message):
-    await message.answer("Returning to game selection:", reply_markup=game_menu))
-async def process_payment(message: types.Message):
-    amount = message.text.split(" ")[0].replace("$", "")
-    payment_link = CRYPTO_PAYMENT_LINKS[amount].format(order_id=message.chat.id)
-    keyboard = ReplyKeyboardMarkup(
-        keyboard=[
-            [KeyboardButton(text="✅ I have paid")],
-            [KeyboardButton(text="🔙 Back")]
-        ],
-        resize_keyboard=True
-    )
+    
     await message.answer(f"Pay using the link: {payment_link}\nOnce paid, click the button below.", reply_markup=keyboard)
 
 @dp.message(lambda message: message.text == "✅ I have paid")
