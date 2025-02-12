@@ -27,7 +27,7 @@ game_menu = ReplyKeyboardMarkup(
         [KeyboardButton(text="\U0001F3AE War Thunder")],
         [KeyboardButton(text="\U0001F3AE Fortnite")],
         [KeyboardButton(text="\U0001F3AE Rust")],
-        [KeyboardButton(text="\U0001F519 Back")]
+        [KeyboardButton(text="\U0001F519 Back to Main Menu")]
     ],
     resize_keyboard=True
 )
@@ -58,7 +58,7 @@ async def send_welcome(message: types.Message):
 async def send_help(message: types.Message):
     await message.answer("Use the menu to select a game and see cheat options.")
 
-@dp.message(lambda message: message.text in ["\U0001F3AE Choose a game", "\U0001F519 Back"])
+@dp.message(lambda message: message.text in ["\U0001F3AE Choose a game", "\U0001F519 Back to Main Menu"])
 async def choose_game(message: types.Message):
     await message.answer("Select a game:", reply_markup=game_menu)
 
@@ -67,7 +67,7 @@ async def show_rust_cheat_prices(message: types.Message):
     cheat_name = message.text
     prices = RUST_CHEAT_PRICES[cheat_name]
     keyboard = ReplyKeyboardMarkup(
-        keyboard=[[KeyboardButton(text=f"{period} - ${price}")] for period, price in prices.items()] + [[KeyboardButton(text="\U0001F519 Back")]],
+        keyboard=[[KeyboardButton(text=f"{period} - ${price}")] for period, price in prices.items()] + [[KeyboardButton(text="\U0001F519 Back to Game Selection")]],
         resize_keyboard=True
     )
     await message.answer(f"Subscription options for {cheat_name}:", reply_markup=keyboard)
@@ -77,7 +77,7 @@ async def show_war_thunder_cheat_prices(message: types.Message):
     cheat_name = message.text
     prices = WAR_THUNDER_CHEAT_PRICES[cheat_name]
     keyboard = ReplyKeyboardMarkup(
-        keyboard=[[KeyboardButton(text=f"{period} - ${price}")] for period, price in prices.items()] + [[KeyboardButton(text="\U0001F519 Back")]],
+        keyboard=[[KeyboardButton(text=f"{period} - ${price}")] for period, price in prices.items()] + [[KeyboardButton(text="\U0001F519 Back to Game Selection")]],
         resize_keyboard=True
     )
     await message.answer(f"Subscription options for {cheat_name}:", reply_markup=keyboard)
@@ -87,10 +87,14 @@ async def show_fortnite_cheat_prices(message: types.Message):
     cheat_name = message.text
     prices = FORTNITE_CHEAT_PRICES[cheat_name]
     keyboard = ReplyKeyboardMarkup(
-        keyboard=[[KeyboardButton(text=f"{period} - ${price}")] for period, price in prices.items()] + [[KeyboardButton(text="\U0001F519 Back")]],
+        keyboard=[[KeyboardButton(text=f"{period} - ${price}")] for period, price in prices.items()] + [[KeyboardButton(text="\U0001F519 Back to Game Selection")]],
         resize_keyboard=True
     )
     await message.answer(f"Subscription options for {cheat_name}:", reply_markup=keyboard)
+
+@dp.message(lambda message: message.text == "\U0001F519 Back to Game Selection")
+async def go_back_to_game_selection(message: types.Message):
+    await message.answer("Returning to game selection:", reply_markup=game_menu))
 async def process_payment(message: types.Message):
     amount = message.text.split(" ")[0].replace("$", "")
     payment_link = CRYPTO_PAYMENT_LINKS[amount].format(order_id=message.chat.id)
