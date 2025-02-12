@@ -94,6 +94,19 @@ async def show_fortnite_cheat_prices(message: types.Message):
 
 @dp.message(lambda message: message.text == "\U0001F519 Back to Game Selection")
 async def go_back_to_game_selection(message: types.Message):
+    await message.answer("Returning to game selection:", reply_markup=game_menu)
+
+async def main():
+    init_db()
+    await bot.delete_webhook(drop_pending_updates=True)
+    await dp.start_polling(bot)
+
+if __name__ == "__main__":
+    asyncio.run(main())
+
+
+@dp.message(lambda message: message.text == "\U0001F519 Back to Game Selection")
+async def go_back_to_game_selection(message: types.Message):
     await message.answer("Returning to game selection:", reply_markup=game_menu))
 async def process_payment(message: types.Message):
     amount = message.text.split(" ")[0].replace("$", "")
