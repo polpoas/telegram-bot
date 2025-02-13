@@ -56,7 +56,7 @@ cheat_prices = {
 async def send_welcome(message: types.Message):
     user_id = message.from_user.id
     username = message.from_user.username if message.from_user.username else "No username"
-    admin_message = f"📢 New user started the bot!
+    admin_message = f"📢 New user started the bot!\n"
 🆔 ID: {user_id}
 👤 Username: @{username}"
     await bot.send_message(ADMIN_ID, admin_message)
