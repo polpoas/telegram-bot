@@ -53,6 +53,15 @@ FORTNITE_CHEAT_PRICES = {
     "SHACK PRIVATE": {"30 days": 80}
 }
 
+@dp.message(lambda message: any(option in message.text for option in ["7 days", "30 days", "31 days", "Lifetime"]))
+async def process_subscription_choice(message: types.Message):
+    selected_option = message.text
+    await message.answer(f"You selected {selected_option}. Proceeding to payment...")
+
+@dp.message(lambda message: message.text == "🔙 Back to Main Menu")
+async def go_back_main_menu(message: types.Message):
+    await message.answer("Returning to main menu:", reply_markup=main_menu)
+
 @dp.message(lambda message: message.text in RUST_CHEAT_PRICES.keys())
 async def show_cheat_subscriptions(message: types.Message):
     cheat_name = message.text
