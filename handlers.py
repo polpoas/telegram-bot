@@ -73,7 +73,7 @@ async def send_welcome(message: types.Message):
         reply_markup=main_menu
     )
 
-@dp.message(lambda message: message.text not in cheat_menus.keys() and message.text not in cheat_prices.keys() and message.text not in ["🎮 Choose a game", "🔙 Back to Main Menu", "✅ I have paid", "📞 Contact Admin", "🔙 Back to Game Selection"])
+@dp.message()
 async def debug_message(message: types.Message):
     await message.answer(f"Received: {message.text}")
 
@@ -122,7 +122,6 @@ async def confirm_payment(message: types.Message):
 
 @dp.message(lambda message: message.text == "📞 Contact Admin")
 async def contact_admin(message: types.Message):
-    await message.answer("You can contact the administrator here: @cheatGGadmin")
     await message.answer("You can contact the administrator here: @cheatGGadmin")
     keyboard = ReplyKeyboardMarkup(
         keyboard=[[KeyboardButton(text="📞 Contact Admin")], [KeyboardButton(text="🔙 Back to Main Menu")]],
