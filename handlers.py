@@ -1,21 +1,61 @@
-await message.answer("""
-        "Welcome to GG Cheats – Your #1 Source for Game Cheats!
+import asyncio
+import logging
+from aiogram import Bot, Dispatcher, types
+from aiogram.filters import Command
+from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
+from config import TOKEN, ADMIN_ID, CRYPTO_PAYMENT_LINKS
+from database import init_db
 
-"
-        "Want to dominate your favorite game, stay ahead of the competition, and maximize your gaming experience? "
-        "We offer reliable, undetectable, and regularly updated cheats for the most popular games.
+bot = Bot(token=TOKEN)
+dp = Dispatcher()
 
-"
-        "✅ Safety First – Minimal risk of bans
-"
-        "✅ Instant Access – Get your cheat immediately after purchase
-"
-        "✅ 24/7 Support – We're always here to help
+logging.basicConfig(level=logging.INFO)
 
-"
-        "Choose your cheat and take your gameplay to the next level! 🚀",
-        """, reply_markup=main_menu
+main_menu = ReplyKeyboardMarkup(
+    keyboard=[[KeyboardButton(text="🎮 Choose a game")]],
+    resize_keyboard=True
+)
+
+game_menu = ReplyKeyboardMarkup(
+    keyboard=[
+        [KeyboardButton(text="🎮 War Thunder")],
+        [KeyboardButton(text="🎮 Fortnite")],
+        [KeyboardButton(text="🎮 Rust")],
+        [KeyboardButton(text="🔙 Back to Main Menu")]
+    ],
+    resize_keyboard=True
+)
+
+cheat_menus = {
+    "🎮 War Thunder": ReplyKeyboardMarkup(
+        keyboard=[[KeyboardButton(text="🚀 Fecurity")], [KeyboardButton(text="🚀 Warchill")],
+                  [KeyboardButton(text="🔙 Back to Game Selection")]],
+        resize_keyboard=True
+    ),
+    "🎮 Fortnite": ReplyKeyboardMarkup(
+        keyboard=[[KeyboardButton(text="🎯 IGNITE")], [KeyboardButton(text="🎯 SHACK PRIVATE")],
+                  [KeyboardButton(text="🔙 Back to Game Selection")]],
+        resize_keyboard=True
+    ),
+    "🎮 Rust": ReplyKeyboardMarkup(
+        keyboard=[[KeyboardButton(text="🔥 Dopamine")], [KeyboardButton(text="🔥 Serotonin")],
+                  [KeyboardButton(text="🔥 Monolith")], [KeyboardButton(text="🔥 Quantum Private")],
+                  [KeyboardButton(text="🔙 Back to Game Selection")]],
+        resize_keyboard=True
     )
+}
+
+cheat_prices = {
+    "🚀 Fecurity": {"30 days": 40}, "🚀 Warchill": {"30 days": 55},
+    "🎯 IGNITE": {"30 days": 110}, "🎯 SHACK PRIVATE": {"30 days": 80},
+    "🔥 Dopamine": {"7 days": 35, "30 days": 100}, "🔥 Serotonin": {"30 days": 90},
+    "🔥 Monolith": {"7 days": 35, "30 days": 70, "Lifetime": 750}, "🔥 Quantum Private": {"31 days": 100}
+}
+
+@dp.message(Command("start"))
+async def send_welcome(message: types.Message):
+    await message.answer(
+        "Welcome to GG Cheats – Your #1 Source for Game Cheats!
 
 "
         "Want to dominate your favorite game, stay ahead of the competition, and maximize your gaming experience? "
