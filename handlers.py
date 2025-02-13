@@ -134,10 +134,11 @@ async def show_subscription_options(message: types.Message):
             keyboard=[[KeyboardButton(text="✅ I have paid")], [KeyboardButton(text="🔙 Back to Main Menu")]],
             resize_keyboard=True
         )
-       await message.answer(f"You selected {message.text}.\n"
-                     f"Pay using the link: {payment_link}\n"
-                     f"Once paid, click the button below.", reply_markup=keyboard)
-
+        await message.answer(f"You selected {message.text}.
+Pay using the link: {payment_link}
+Once paid, click the button below.")
+                             f"Pay using the link: {payment_link}\n"
+                             f"Once paid, click the button below.", reply_markup=keyboard)
     else:
         await message.answer("Invalid amount. Please choose a valid subscription option.")
 
