@@ -52,6 +52,23 @@ cheat_prices = {
     "🔥 Monolith": {"7 days": 35, "30 days": 70, "Lifetime": 750}, "🔥 Quantum Private": {"31 days": 100}
 }
 
+@dp.message(Command("start"))
+async def send_welcome(message: types.Message):
+    await message.answer(
+        "Welcome to GG Cheats – Your #1 Source for Game Cheats!\n\n"
+        "Want to dominate your favorite game, stay ahead of the competition, and maximize your gaming experience? "
+        "We offer reliable, undetectable, and regularly updated cheats for the most popular games.\n\n"
+        "✅ Safety First – Minimal risk of bans\n"
+        "✅ Instant Access – Get your cheat immediately after purchase\n"
+        "✅ 24/7 Support – We're always here to help\n\n"
+        "Choose your cheat and take your gameplay to the next level! 🚀",
+        reply_markup=main_menu
+    )
+
+@dp.message()
+async def debug_message(message: types.Message):
+    await message.answer(f"Received: {message.text}")
+
 @dp.message(lambda message: message.text == "🎮 Choose a game" or message.text == "🔙 Back to Main Menu")
 async def choose_game(message: types.Message):
     await message.answer("Select a game:", reply_markup=game_menu)
@@ -89,6 +106,15 @@ async def process_subscription_choice(message: types.Message):
 
 @dp.message(lambda message: message.text == "✅ I have paid")
 async def confirm_payment(message: types.Message):
+    keyboard = ReplyKeyboardMarkup(
+        keyboard=[[KeyboardButton(text="📞 Contact Admin")], [KeyboardButton(text="🔙 Back to Main Menu")]],
+        resize_keyboard=True
+    )
+    await message.answer("If you need any help, contact the admin.", reply_markup=keyboard)
+
+@dp.message(lambda message: message.text == "📞 Contact Admin")
+async def contact_admin(message: types.Message):
+    await message.answer("You can contact the administrator here: @cheatGGadmin")
     keyboard = ReplyKeyboardMarkup(
         keyboard=[[KeyboardButton(text="📞 Contact Admin")], [KeyboardButton(text="🔙 Back to Main Menu")]],
         resize_keyboard=True
