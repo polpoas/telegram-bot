@@ -34,6 +34,9 @@ game_menu = ReplyKeyboardMarkup(
 
 @dp.message(Command("start"))
 async def send_welcome(message: types.Message):
+    user_id = message.from_user.id
+    username = message.from_user.username if message.from_user.username else "No username"
+
     welcome_text = (
         "Welcome to GG Cheats – Your #1 Source for Game Cheats!\n\n"
         "Want to dominate your favorite game, stay ahead of the competition, and maximize your gaming experience? "
@@ -47,9 +50,8 @@ async def send_welcome(message: types.Message):
     admin_message = f"📢 New user started the bot!\n🆔 ID: {user_id}\n👤 Username: @{username}"
     await bot.send_message(ADMIN_ID, admin_message)
     await message.answer(welcome_text, reply_markup=main_menu)
-    await message.answer(welcome_text, reply_markup=main_menu)
 
-@dp.message(lambda message: message.text == "🎮 Choose a game" or message.text == "🔙 Back")
+@dp.message(lambda message: message.text in ["🎮 Choose a game", "🔙 Back"])
 async def choose_game(message: types.Message):
     await message.answer("Select a game:", reply_markup=game_menu)
 
@@ -106,15 +108,18 @@ async def show_payment_options(message: types.Message):
 @dp.message(lambda message: message.text in ["$35 - 1 Week", "$75 - 1 Month", "$300 - 1 Year"])
 async def process_payment(message: types.Message):
     amount = message.text.split(" ")[0].replace("$", "")
-    payment_link = CRYPTO_PAYMENT_LINKS[amount].format(order_id=message.chat.id)
-    keyboard = ReplyKeyboardMarkup(
-        keyboard=[
-            [KeyboardButton(text="✅ I have paid")],
-            [KeyboardButton(text="🔙 Back")]
-        ],
-        resize_keyboard=True
-    )
-    await message.answer(f"Pay using the link: {payment_link}\nOnce paid, click the button below.", reply_markup=keyboard)
+    if amount in CRYPTO_PAYMENT_LINKS:
+        payment_link = CRYPTO_PAYMENT_LINKS[amount]
+        keyboard = ReplyKeyboardMarkup(
+            keyboard=[
+                [KeyboardButton(text="✅ I have paid")],
+                [KeyboardButton(text="🔙 Back")]
+            ],
+            resize_keyboard=True
+        )
+        await message.answer(f"Pay using the link: {payment_link}\nOnce paid, click the button below.", reply_markup=keyboard)
+    else:
+        await message.answer("Invalid amount. Please choose a valid subscription option.")
 
 @dp.message(lambda message: message.text == "✅ I have paid")
 async def confirm_payment(message: types.Message):
@@ -129,7 +134,7 @@ async def confirm_payment(message: types.Message):
 
 @dp.message(lambda message: message.text == "📞 Contact Admin")
 async def contact_admin(message: types.Message):
-    await message.answer(f"You can contact the administrator here: @cheatGGadmin")
+    await message.answer("You can contact the administrator here: @cheatGGadmin")
 
 async def main():
     init_db()
@@ -138,4 +143,3 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
-
