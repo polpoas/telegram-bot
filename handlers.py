@@ -121,19 +121,21 @@ async def show_subscription_options(message: types.Message):
     )
     
     await message.answer(f"Subscription options for {selected_cheat}:", reply_markup=keyboard)
-    if ' - ' in selected_option:
-        amount = selected_option.split(" - ")[1].replace("$", "").strip()
+    if ' - ' in message.text:
+        amount = message.text.split(" - ")[1].replace("$", "").strip()
     else:
         await message.answer("Invalid selection. Please choose a valid subscription option.")
         return
+        return
     
-    if str(amount) in CRYPTO_PAYMENT_LINKS:
-        payment_link = CRYPTO_PAYMENT_LINKS[str(amount)]
+    if amount in CRYPTO_PAYMENT_LINKS:
+        payment_link = CRYPTO_PAYMENT_LINKS[amount]
         keyboard = ReplyKeyboardMarkup(
             keyboard=[[KeyboardButton(text="✅ I have paid")], [KeyboardButton(text="🔙 Back to Main Menu")]],
             resize_keyboard=True
         )
-        await message.answer(f"You selected {selected_option}.\n"
+        await message.answer(f"You selected {message.text}.
+"
                              f"Pay using the link: {payment_link}\n"
                              f"Once paid, click the button below.", reply_markup=keyboard)
     else:
