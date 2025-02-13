@@ -53,6 +53,10 @@ FORTNITE_CHEAT_PRICES = {
     "SHACK PRIVATE": {"30 days": 80}
 }
 
+@dp.message(lambda message: message.text in ["🎮 Choose a game"])
+async def choose_game(message: types.Message):
+    await message.answer("Select a game:", reply_markup=game_menu)
+
 @dp.message(lambda message: any(option in message.text for option in ["7 days", "30 days", "31 days", "Lifetime"]))
 async def process_subscription_choice(message: types.Message):
     selected_option = message.text
@@ -63,7 +67,9 @@ async def process_subscription_choice(message: types.Message):
             keyboard=[[KeyboardButton(text="✅ I have paid")], [KeyboardButton(text="🔙 Back to Main Menu")]],
             resize_keyboard=True
         )
-        await message.answer(f"You selected {selected_option}.\nPay using the link: {payment_link}\nOnce paid, click the button below.", reply_markup=keyboard)
+        await message.answer(f"You selected {selected_option}.
+Pay using the link: {payment_link}
+Once paid, click the button below.", reply_markup=keyboard)
     else:
         await message.answer("Invalid amount. Please choose a valid subscription option.")
 
