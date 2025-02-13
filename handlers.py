@@ -17,85 +17,107 @@ logging.basicConfig(level=logging.INFO)
 
 # Main menu keyboard
 main_menu = ReplyKeyboardMarkup(
-    keyboard=[[KeyboardButton(text="\U0001F3AE Choose a game")]],
+    keyboard=[[KeyboardButton(text="🎮 Choose a game")]],
     resize_keyboard=True
 )
 
 # Game selection keyboard
 game_menu = ReplyKeyboardMarkup(
     keyboard=[
-        [KeyboardButton(text="\U0001F3AE War Thunder")],
-        [KeyboardButton(text="\U0001F3AE Fortnite")],
-        [KeyboardButton(text="\U0001F3AE Rust")],
-        [KeyboardButton(text="\U0001F519 Back to Main Menu")]
+        [KeyboardButton(text="🎮 War Thunder")],
+        [KeyboardButton(text="🎮 Fortnite")],
+        [KeyboardButton(text="🎮 Rust")],
+        [KeyboardButton(text="🔙 Back")]
     ],
     resize_keyboard=True
 )
 
-# Cheat subscription prices
-RUST_CHEAT_PRICES = {
-    "Dopamine": {"7 days": 35, "30 days": 100},
-    "Serotonin": {"30 days": 90},
-    "Monolith": {"7 days": 35, "30 days": 70, "Lifetime": 750},
-    "Quantum Private": {"31 days": 100}
-}
-
-WAR_THUNDER_CHEAT_PRICES = {
-    "Fecurity": {"30 days": 40},
-    "Warchill": {"30 days": 55}
-}
-
-FORTNITE_CHEAT_PRICES = {
-    "IGNITE": {"30 days": 110},
-    "SHACK PRIVATE": {"30 days": 80}
-}
-
 @dp.message(Command("start"))
 async def send_welcome(message: types.Message):
-    await message.answer("Welcome! Choose a game to see available cheats.", reply_markup=game_menu)
+    user_id = message.from_user.id
+    username = message.from_user.username if message.from_user.username else "No username"
+    
+    welcome_text = (
+        "Welcome to GG Cheats – Your #1 Source for Game Cheats!\n\n"
+        "Want to dominate your favorite game, stay ahead of the competition, and maximize your gaming experience? "
+        "We offer reliable, undetectable, and regularly updated cheats for the most popular games.\n\n"
+        "✅ Safety First – Minimal risk of bans\n"
+        "✅ Instant Access – Get your cheat immediately after purchase\n"
+        "✅ 24/7 Support – We're always here to help\n\n"
+        "Choose your cheat and take your gameplay to the next level! 🚀"
+    )
+    
+    admin_message = f"📢 New user started the bot!\n🆔 ID: {user_id}\n👤 Username: @{username}"
+    await bot.send_message(ADMIN_ID, admin_message)
+    await message.answer(welcome_text, reply_markup=main_menu)
 
-@dp.message(Command("help"))
-async def send_help(message: types.Message):
-    await message.answer("Use the menu to select a game and see cheat options.")
-
-@dp.message(lambda message: message.text in ["\U0001F3AE Choose a game", "\U0001F519 Back to Main Menu"])
+@dp.message(lambda message: message.text == "🎮 Choose a game" or message.text == "🔙 Back")
 async def choose_game(message: types.Message):
     await message.answer("Select a game:", reply_markup=game_menu)
 
-@dp.message(lambda message: message.text in RUST_CHEAT_PRICES.keys())
-async def show_rust_cheat_prices(message: types.Message):
-    cheat_name = message.text
-    prices = RUST_CHEAT_PRICES[cheat_name]
+@dp.message(lambda message: message.text == "🎮 War Thunder")
+async def show_war_thunder_cheats(message: types.Message):
     keyboard = ReplyKeyboardMarkup(
-        keyboard=[[KeyboardButton(text=f"{period} - ${price}")] for period, price in prices.items()] + [[KeyboardButton(text="\U0001F519 Back to Game Selection")]],
+        keyboard=[
+            [KeyboardButton(text="Fecurity")],
+            [KeyboardButton(text="Warchill")],
+            [KeyboardButton(text="🔙 Back")]
+        ],
         resize_keyboard=True
     )
-    await message.answer(f"Subscription options for {cheat_name}:", reply_markup=keyboard)
+    await message.answer("Select a cheat for War Thunder:", reply_markup=keyboard)
 
-@dp.message(lambda message: message.text in WAR_THUNDER_CHEAT_PRICES.keys())
-async def show_war_thunder_cheat_prices(message: types.Message):
-    cheat_name = message.text
-    prices = WAR_THUNDER_CHEAT_PRICES[cheat_name]
+@dp.message(lambda message: message.text == "🎮 Fortnite")
+async def show_fortnite_cheats(message: types.Message):
     keyboard = ReplyKeyboardMarkup(
-        keyboard=[[KeyboardButton(text=f"{period} - ${price}")] for period, price in prices.items()] + [[KeyboardButton(text="\U0001F519 Back to Game Selection")]],
+        keyboard=[
+            [KeyboardButton(text="IGNITE")],
+            [KeyboardButton(text="SHACK PRIVATE")],
+            [KeyboardButton(text="🔙 Back")]
+        ],
         resize_keyboard=True
     )
-    await message.answer(f"Subscription options for {cheat_name}:", reply_markup=keyboard)
+    await message.answer("Select a cheat for Fortnite:", reply_markup=keyboard)
 
-@dp.message(lambda message: message.text in FORTNITE_CHEAT_PRICES.keys())
-async def show_fortnite_cheat_prices(message: types.Message):
-    cheat_name = message.text
-    prices = FORTNITE_CHEAT_PRICES[cheat_name]
+@dp.message(lambda message: message.text == "🎮 Rust")
+async def show_rust_cheats(message: types.Message):
     keyboard = ReplyKeyboardMarkup(
-        keyboard=[[KeyboardButton(text=f"{period} - ${price}")] for period, price in prices.items()] + [[KeyboardButton(text="\U0001F519 Back to Game Selection")]],
+        keyboard=[
+            [KeyboardButton(text="Dopamine")],
+            [KeyboardButton(text="Serotonin")],
+            [KeyboardButton(text="Monolith")],
+            [KeyboardButton(text="Quantum Private")],
+            [KeyboardButton(text="🔙 Back")]
+        ],
         resize_keyboard=True
     )
-    await message.answer(f"Subscription options for {cheat_name}:", reply_markup=keyboard)
+    await message.answer("Select a cheat for Rust:", reply_markup=keyboard)
 
-@dp.message(lambda message: message.text == "\U0001F519 Back to Game Selection")
-async def go_back_to_game_selection(message: types.Message):
-    await message.answer("Returning to game selection:", reply_markup=game_menu)
-    
+@dp.message(lambda message: message.text in ["Dopamine", "Serotonin", "Fecurity", "Warchill", "IGNITE", "SHACK PRIVATE"])
+async def show_payment_options(message: types.Message):
+    selected_cheat = message.text
+    keyboard = ReplyKeyboardMarkup(
+        keyboard=[
+            [KeyboardButton(text="$35 - 1 Week")],
+            [KeyboardButton(text="$75 - 1 Month")],
+            [KeyboardButton(text="$300 - 1 Year")],
+            [KeyboardButton(text="🔙 Back")]
+        ],
+        resize_keyboard=True
+    )
+    await message.answer(f"You selected {selected_cheat}. Choose a subscription period:", reply_markup=keyboard)
+
+@dp.message(lambda message: message.text in ["$35 - 1 Week", "$75 - 1 Month", "$300 - 1 Year"])
+async def process_payment(message: types.Message):
+    amount = message.text.split(" ")[0].replace("$", "")
+    payment_link = CRYPTO_PAYMENT_LINKS[amount].format(order_id=message.chat.id)
+    keyboard = ReplyKeyboardMarkup(
+        keyboard=[
+            [KeyboardButton(text="✅ I have paid")],
+            [KeyboardButton(text="🔙 Back")]
+        ],
+        resize_keyboard=True
+    )
     await message.answer(f"Pay using the link: {payment_link}\nOnce paid, click the button below.", reply_markup=keyboard)
 
 @dp.message(lambda message: message.text == "✅ I have paid")
@@ -116,10 +138,3 @@ async def contact_admin(message: types.Message):
 async def main():
     init_db()
     await bot.delete_webhook(drop_pending_updates=True)
-    await dp.start_polling(bot)
-
-if __name__ == "__main__":
-    asyncio.run(main())
-@dp.message()
-async def handle_unrecognized(message: types.Message):
-    await message.answer("I don't understand this command. Please use the menu.")
