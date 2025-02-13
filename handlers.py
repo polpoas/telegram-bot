@@ -69,7 +69,7 @@ async def process_subscription_choice(message: types.Message):
         )
         await message.answer(f"You selected {selected_option}.
 Pay using the link: {payment_link}
-Once paid, click the button below."), reply_markup=keyboard)
+Once paid, click the button below.", reply_markup=keyboard)
     else:
         await message.answer("Invalid amount. Please choose a valid subscription option.")
 
