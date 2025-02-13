@@ -96,10 +96,36 @@ async def show_fortnite_cheats(message: types.Message):
 async def show_rust_cheats(message: types.Message):
     await message.answer("Select a cheat for Rust:", reply_markup=rust_cheats)
 
-@dp.message(lambda message: message.text in RUST_CHEAT_PRICES or message.text in WAR_THUNDER_CHEAT_PRICES or message.text in FORTNITE_CHEAT_PRICES)
-async def process_subscription_choice(message: types.Message):
-    selected_option = message.text
-    amount = selected_option.split(" - ")[1].replace("$", "").strip()
+@dp.message(lambda message: message.text in RUST_CHEAT_PRICES.keys() or 
+                            message.text in WAR_THUNDER_CHEAT_PRICES.keys() or 
+                            message.text in FORTNITE_CHEAT_PRICES.keys())
+async def show_subscription_options(message: types.Message):
+    selected_cheat = message.text
+    prices = {}
+    
+    if selected_cheat in RUST_CHEAT_PRICES:
+        prices = RUST_CHEAT_PRICES[selected_cheat]
+    elif selected_cheat in WAR_THUNDER_CHEAT_PRICES:
+        prices = WAR_THUNDER_CHEAT_PRICES[selected_cheat]
+    elif selected_cheat in FORTNITE_CHEAT_PRICES:
+        prices = FORTNITE_CHEAT_PRICES[selected_cheat]
+    
+    if not prices:
+        await message.answer("Error: No pricing available for this cheat.")
+        return
+
+    keyboard = ReplyKeyboardMarkup(
+        keyboard=[[KeyboardButton(text=f"{duration} - ${price}")] for duration, price in prices.items()] +
+                 [[KeyboardButton(text="🔙 Back to Game Selection")]],
+        resize_keyboard=True
+    )
+    
+    await message.answer(f"Subscription options for {selected_cheat}:", reply_markup=keyboard)
+    if ' - ' in selected_option:
+        amount = selected_option.split(" - ")[1].replace("$", "").strip()
+    else:
+        await message.answer("Invalid selection. Please choose a valid subscription option.")
+        return
     
     if str(amount) in CRYPTO_PAYMENT_LINKS:
         payment_link = CRYPTO_PAYMENT_LINKS[str(amount)]
