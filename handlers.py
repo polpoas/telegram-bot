@@ -60,16 +60,17 @@ async def choose_game(message: types.Message):
 @dp.message(lambda message: any(option in message.text for option in ["7 days", "30 days", "31 days", "Lifetime"]))
 async def process_subscription_choice(message: types.Message):
     selected_option = message.text
-    amount = selected_option.split(" - ")[1].replace("$", "")
-    if amount in CRYPTO_PAYMENT_LINKS:
-        payment_link = CRYPTO_PAYMENT_LINKS[amount]
+    amount = selected_option.split(" - ")[1].replace("$", "").strip()
+    
+    if str(amount) in CRYPTO_PAYMENT_LINKS:
+        payment_link = CRYPTO_PAYMENT_LINKS[str(amount)]
         keyboard = ReplyKeyboardMarkup(
             keyboard=[[KeyboardButton(text="✅ I have paid")], [KeyboardButton(text="🔙 Back to Main Menu")]],
             resize_keyboard=True
         )
-        await message.answer(f"You selected {selected_option}.
-Pay using the link: {payment_link}
-Once paid, click the button below.", reply_markup=keyboard)
+        await message.answer(f"You selected {selected_option}.\n"
+                             f"Pay using the link: {payment_link}\n"
+                             f"Once paid, click the button below.", reply_markup=keyboard)
     else:
         await message.answer("Invalid amount. Please choose a valid subscription option.")
 
