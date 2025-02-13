@@ -34,9 +34,6 @@ game_menu = ReplyKeyboardMarkup(
 
 @dp.message(Command("start"))
 async def send_welcome(message: types.Message):
-    user_id = message.from_user.id
-    username = message.from_user.username if message.from_user.username else "No username"
-    
     welcome_text = (
         "Welcome to GG Cheats – Your #1 Source for Game Cheats!\n\n"
         "Want to dominate your favorite game, stay ahead of the competition, and maximize your gaming experience? "
@@ -46,9 +43,10 @@ async def send_welcome(message: types.Message):
         "✅ 24/7 Support – We're always here to help\n\n"
         "Choose your cheat and take your gameplay to the next level! 🚀"
     )
-    
+
     admin_message = f"📢 New user started the bot!\n🆔 ID: {user_id}\n👤 Username: @{username}"
     await bot.send_message(ADMIN_ID, admin_message)
+    await message.answer(welcome_text, reply_markup=main_menu)
     await message.answer(welcome_text, reply_markup=main_menu)
 
 @dp.message(lambda message: message.text == "🎮 Choose a game" or message.text == "🔙 Back")
@@ -85,8 +83,6 @@ async def show_rust_cheats(message: types.Message):
         keyboard=[
             [KeyboardButton(text="Dopamine")],
             [KeyboardButton(text="Serotonin")],
-            [KeyboardButton(text="Monolith")],
-            [KeyboardButton(text="Quantum Private")],
             [KeyboardButton(text="🔙 Back")]
         ],
         resize_keyboard=True
@@ -138,3 +134,8 @@ async def contact_admin(message: types.Message):
 async def main():
     init_db()
     await bot.delete_webhook(drop_pending_updates=True)
+    await dp.start_polling(bot)
+
+if __name__ == "__main__":
+    asyncio.run(main())
+
