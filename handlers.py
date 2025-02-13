@@ -96,7 +96,7 @@ async def show_fortnite_cheats(message: types.Message):
 async def show_rust_cheats(message: types.Message):
     await message.answer("Select a cheat for Rust:", reply_markup=rust_cheats)
 
-@dp.message(lambda message: message.text in sum([list(RUST_CHEAT_PRICES.keys()), list(WAR_THUNDER_CHEAT_PRICES.keys()), list(FORTNITE_CHEAT_PRICES.keys())], []))
+@dp.message(lambda message: message.text in RUST_CHEAT_PRICES or message.text in WAR_THUNDER_CHEAT_PRICES or message.text in FORTNITE_CHEAT_PRICES)
 async def process_subscription_choice(message: types.Message):
     selected_option = message.text
     amount = selected_option.split(" - ")[1].replace("$", "").strip()
@@ -136,4 +136,3 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
-
