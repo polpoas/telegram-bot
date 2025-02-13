@@ -32,30 +32,69 @@ game_menu = ReplyKeyboardMarkup(
     resize_keyboard=True
 )
 
+# Cheat selection keyboards
+war_thunder_cheats = ReplyKeyboardMarkup(
+    keyboard=[
+        [KeyboardButton(text="🚀 Fecurity")],
+        [KeyboardButton(text="🚀 Warchill")],
+        [KeyboardButton(text="🔙 Back to Game Selection")]
+    ],
+    resize_keyboard=True
+)
+
+fortnite_cheats = ReplyKeyboardMarkup(
+    keyboard=[
+        [KeyboardButton(text="🎯 IGNITE")],
+        [KeyboardButton(text="🎯 SHACK PRIVATE")],
+        [KeyboardButton(text="🔙 Back to Game Selection")]
+    ],
+    resize_keyboard=True
+)
+
+rust_cheats = ReplyKeyboardMarkup(
+    keyboard=[
+        [KeyboardButton(text="🔥 Dopamine")],
+        [KeyboardButton(text="🔥 Serotonin")],
+        [KeyboardButton(text="🔥 Monolith")],
+        [KeyboardButton(text="🔥 Quantum Private")],
+        [KeyboardButton(text="🔙 Back to Game Selection")]
+    ],
+    resize_keyboard=True
+)
+
 # Cheat subscription prices
 RUST_CHEAT_PRICES = {
-    "Dopamine": {"7 days": 35, "30 days": 100},
-    "Serotonin": {"30 days": 90},
-    "Monolith": {"7 days": 35, "30 days": 70, "Lifetime": 750},
-    "Quantum Private": {"31 days": 100},
-    "Phantom": {"7 days": 40, "30 days": 120, "Lifetime": 800},
-    "Overload": {"7 days": 50, "30 days": 140, "Lifetime": 900},
-    "Nemesis": {"7 days": 45, "30 days": 130, "Lifetime": 850}
+    "🔥 Dopamine": {"7 days": 35, "30 days": 100},
+    "🔥 Serotonin": {"30 days": 90},
+    "🔥 Monolith": {"7 days": 35, "30 days": 70, "Lifetime": 750},
+    "🔥 Quantum Private": {"31 days": 100}
 }
 
 WAR_THUNDER_CHEAT_PRICES = {
-    "Fecurity": {"30 days": 40},
-    "Warchill": {"30 days": 55}
+    "🚀 Fecurity": {"30 days": 40},
+    "🚀 Warchill": {"30 days": 55}
 }
 
 FORTNITE_CHEAT_PRICES = {
-    "IGNITE": {"30 days": 110},
-    "SHACK PRIVATE": {"30 days": 80}
+    "🎯 IGNITE": {"30 days": 110},
+    "🎯 SHACK PRIVATE": {"30 days": 80}
 }
 
 @dp.message(lambda message: message.text == "🎮 Choose a game" or message.text == "🔙 Back to Main Menu")
 async def choose_game(message: types.Message):
     await message.answer("Select a game:", reply_markup=game_menu)
+
+@dp.message(lambda message: message.text == "🎮 War Thunder")
+async def show_war_thunder_cheats(message: types.Message):
+    await message.answer("Select a cheat for War Thunder:", reply_markup=war_thunder_cheats)
+
+@dp.message(lambda message: message.text == "🎮 Fortnite")
+async def show_fortnite_cheats(message: types.Message):
+    await message.answer("Select a cheat for Fortnite:", reply_markup=fortnite_cheats)
+
+@dp.message(lambda message: message.text == "🎮 Rust")
+async def show_rust_cheats(message: types.Message):
+    await message.answer("Select a cheat for Rust:", reply_markup=rust_cheats)
 
 @dp.message(lambda message: any(option in message.text for option in ["7 days", "30 days", "31 days", "Lifetime"]))
 async def process_subscription_choice(message: types.Message):
@@ -81,6 +120,10 @@ async def confirm_payment(message: types.Message):
         resize_keyboard=True
     )
     await message.answer("If you need any help, contact the admin.", reply_markup=keyboard)
+
+@dp.message(lambda message: message.text == "🔙 Back to Game Selection")
+async def go_back_game_selection(message: types.Message):
+    await message.answer("Returning to game selection:", reply_markup=game_menu)
 
 @dp.message(lambda message: message.text == "🔙 Back to Main Menu")
 async def go_back_main_menu(message: types.Message):
