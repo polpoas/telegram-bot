@@ -54,6 +54,12 @@ cheat_prices = {
 
 @dp.message(Command("start"))
 async def send_welcome(message: types.Message):
+    user_id = message.from_user.id
+    username = message.from_user.username if message.from_user.username else "No username"
+    admin_message = f"📢 New user started the bot!
+🆔 ID: {user_id}
+👤 Username: @{username}"
+    await bot.send_message(ADMIN_ID, admin_message)
     await message.answer(
         "Welcome to GG Cheats – Your #1 Source for Game Cheats!\n\n"
         "Want to dominate your favorite game, stay ahead of the competition, and maximize your gaming experience? "
