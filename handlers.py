@@ -53,7 +53,7 @@ FORTNITE_CHEAT_PRICES = {
     "SHACK PRIVATE": {"30 days": 80}
 }
 
-@dp.message(lambda message: message.text in ["🎮 Choose a game"])
+@dp.message(lambda message: message.text == "🎮 Choose a game" or message.text == "🔙 Back to Main Menu")
 async def choose_game(message: types.Message):
     await message.answer("Select a game:", reply_markup=game_menu)
 
