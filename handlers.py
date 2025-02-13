@@ -57,7 +57,7 @@ async def send_welcome(message: types.Message):
     user_id = message.from_user.id
     username = message.from_user.username if message.from_user.username else "No username"
     admin_message = f"📢 New user started the bot!
-🆔 ID: {user_id}
+"🆔 ID: {user_id}
 👤 Username: @{username}"
     await bot.send_message(ADMIN_ID, admin_message)
     await message.answer(
@@ -134,3 +134,4 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+
