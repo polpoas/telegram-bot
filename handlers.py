@@ -126,7 +126,6 @@ async def show_subscription_options(message: types.Message):
     else:
         await message.answer("Invalid selection. Please choose a valid subscription option.")
         return
-        return
     
     if amount in CRYPTO_PAYMENT_LINKS:
         payment_link = CRYPTO_PAYMENT_LINKS[amount]
@@ -135,7 +134,7 @@ async def show_subscription_options(message: types.Message):
             resize_keyboard=True
         )
         await message.answer(f"You selected {message.text}.
-Pay using the link: {payment_link}
+, reply_markup=keyboard)Pay using the link: {payment_link}
 Once paid, click the button below.", reply_markup=keyboard)Pay using the link: {payment_link}
 Once paid, click the button below.")
                              f"Pay using the link: {payment_link}\n"
