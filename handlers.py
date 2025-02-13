@@ -55,17 +55,25 @@ cheat_prices = {
 @dp.message(Command("start"))
 async def send_welcome(message: types.Message):
     await message.answer(
-        "Welcome to GG Cheats – Your #1 Source for Game Cheats!\n\n"
+        "Welcome to GG Cheats – Your #1 Source for Game Cheats!
+
+"
         "Want to dominate your favorite game, stay ahead of the competition, and maximize your gaming experience? "
-        "We offer reliable, undetectable, and regularly updated cheats for the most popular games.\n\n"
-        "✅ Safety First – Minimal risk of bans\n"
-        "✅ Instant Access – Get your cheat immediately after purchase\n"
-        "✅ 24/7 Support – We're always here to help\n\n"
+        "We offer reliable, undetectable, and regularly updated cheats for the most popular games.
+
+"
+        "✅ Safety First – Minimal risk of bans
+"
+        "✅ Instant Access – Get your cheat immediately after purchase
+"
+        "✅ 24/7 Support – We're always here to help
+
+"
         "Choose your cheat and take your gameplay to the next level! 🚀",
         reply_markup=main_menu
     )
 
-@dp.message()
+@dp.message(lambda message: message.text not in cheat_menus.keys() and message.text not in cheat_prices.keys() and message.text not in ["🎮 Choose a game", "🔙 Back to Main Menu", "✅ I have paid", "📞 Contact Admin", "🔙 Back to Game Selection"])
 async def debug_message(message: types.Message):
     await message.answer(f"Received: {message.text}")
 
@@ -114,6 +122,7 @@ async def confirm_payment(message: types.Message):
 
 @dp.message(lambda message: message.text == "📞 Contact Admin")
 async def contact_admin(message: types.Message):
+    await message.answer("You can contact the administrator here: @cheatGGadmin")
     await message.answer("You can contact the administrator here: @cheatGGadmin")
     keyboard = ReplyKeyboardMarkup(
         keyboard=[[KeyboardButton(text="📞 Contact Admin")], [KeyboardButton(text="🔙 Back to Main Menu")]],
