@@ -1,4 +1,4 @@
-await message.answer(
+await message.answer("""
         "Welcome to GG Cheats – Your #1 Source for Game Cheats!
 
 "
@@ -14,7 +14,7 @@ await message.answer(
 
 "
         "Choose your cheat and take your gameplay to the next level! 🚀",
-        reply_markup=main_menu
+        """, reply_markup=main_menu
     )
 
 "
