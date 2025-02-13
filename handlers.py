@@ -56,41 +56,28 @@ FORTNITE_CHEAT_PRICES = {
 @dp.message(lambda message: any(option in message.text for option in ["7 days", "30 days", "31 days", "Lifetime"]))
 async def process_subscription_choice(message: types.Message):
     selected_option = message.text
-    await message.answer(f"You selected {selected_option}. Proceeding to payment...")
+    amount = selected_option.split(" - ")[1].replace("$", "")
+    if amount in CRYPTO_PAYMENT_LINKS:
+        payment_link = CRYPTO_PAYMENT_LINKS[amount]
+        keyboard = ReplyKeyboardMarkup(
+            keyboard=[[KeyboardButton(text="✅ I have paid")], [KeyboardButton(text="🔙 Back to Main Menu")]],
+            resize_keyboard=True
+        )
+        await message.answer(f"You selected {selected_option}.\nPay using the link: {payment_link}\nOnce paid, click the button below.", reply_markup=keyboard)
+    else:
+        await message.answer("Invalid amount. Please choose a valid subscription option.")
+
+@dp.message(lambda message: message.text == "✅ I have paid")
+async def confirm_payment(message: types.Message):
+    keyboard = ReplyKeyboardMarkup(
+        keyboard=[[KeyboardButton(text="📞 Contact Admin")], [KeyboardButton(text="🔙 Back to Main Menu")]],
+        resize_keyboard=True
+    )
+    await message.answer("If you need any help, contact the admin.", reply_markup=keyboard)
 
 @dp.message(lambda message: message.text == "🔙 Back to Main Menu")
 async def go_back_main_menu(message: types.Message):
     await message.answer("Returning to main menu:", reply_markup=main_menu)
-
-@dp.message(lambda message: message.text in RUST_CHEAT_PRICES.keys())
-async def show_cheat_subscriptions(message: types.Message):
-    cheat_name = message.text
-    prices = RUST_CHEAT_PRICES[cheat_name]
-    keyboard = ReplyKeyboardMarkup(
-        keyboard=[[KeyboardButton(text=f"{duration} - ${price}")] for duration, price in prices.items()] + [[KeyboardButton(text="🔙 Back to Main Menu")]],
-        resize_keyboard=True
-    )
-    await message.answer(f"Subscription options for {cheat_name}:", reply_markup=keyboard)
-
-@dp.message(lambda message: message.text in WAR_THUNDER_CHEAT_PRICES.keys())
-async def show_wt_cheat_subscriptions(message: types.Message):
-    cheat_name = message.text
-    prices = WAR_THUNDER_CHEAT_PRICES[cheat_name]
-    keyboard = ReplyKeyboardMarkup(
-        keyboard=[[KeyboardButton(text=f"{duration} - ${price}")] for duration, price in prices.items()] + [[KeyboardButton(text="🔙 Back to Main Menu")]],
-        resize_keyboard=True
-    )
-    await message.answer(f"Subscription options for {cheat_name}:", reply_markup=keyboard)
-
-@dp.message(lambda message: message.text in FORTNITE_CHEAT_PRICES.keys())
-async def show_fortnite_cheat_subscriptions(message: types.Message):
-    cheat_name = message.text
-    prices = FORTNITE_CHEAT_PRICES[cheat_name]
-    keyboard = ReplyKeyboardMarkup(
-        keyboard=[[KeyboardButton(text=f"{duration} - ${price}")] for duration, price in prices.items()] + [[KeyboardButton(text="🔙 Back to Main Menu")]],
-        resize_keyboard=True
-    )
-    await message.answer(f"Subscription options for {cheat_name}:", reply_markup=keyboard)
 
 async def main():
     init_db()
